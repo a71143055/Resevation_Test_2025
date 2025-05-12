@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
             selectedDay = date_pick.getDayOfMonth();
             selectedHour = time_pick.getHour();
             selectedMinute = time_pick.getMinute();
+            date_pick.setVisibility(View.INVISIBLE);
+            time_pick.setVisibility(View.INVISIBLE);
             text_result.setText("예약 완료 : " + selectedYear + "년 " + selectedMonth + "월 " + selectedDay + "일 " + selectedHour + "시 " + selectedMinute + "분");
             return true;
         }
