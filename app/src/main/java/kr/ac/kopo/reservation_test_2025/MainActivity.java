@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         calendar.setVisibility(View.INVISIBLE);
         time_pick.setVisibility(View.INVISIBLE);
         rb_date.setOnClickListener(rbListener);
+        rb_time.setOnClickListener(rbListener);
     }
     View.OnClickListener rbListener = new View.OnClickListener() {
         @Override
