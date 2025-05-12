@@ -1,6 +1,8 @@
 package kr.ac.kopo.reservation_test_2025;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     CalendarView calendar;
     TimePicker time_pick;
     TextView text_result;
+    Button btn_start, btnDone;
+
+    int selectedYear, selectedMonth, selectedDay;
+    int selectedHour, selectedMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +43,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         chronometer = findViewById(R.id.chronometer);
-        Button btn_start = findViewById(R.id.btn_start);
+        btn_start = findViewById(R.id.btn_start);
         rg = findViewById(R.id.rg);
         rb_date = findViewById(R.id.rb_date);
         rb_time = findViewById(R.id.rb_time);
         calendar = findViewById(R.id.calendar);
         time_pick = findViewById(R.id.time_pick);
         text_result = findViewById(R.id.text_result);
-        Button btnDone = findViewById(R.id.btn_done);
+        btnDone = findViewById(R.id.btn_done);
 
         calendar.setVisibility(View.INVISIBLE);
         time_pick.setVisibility(View.INVISIBLE);
         rb_date.setOnClickListener(rbListener);
         rb_time.setOnClickListener(rbListener);
+        btn_start.setOnClickListener(btnListener);
+        btnDone.setOnClickListener(btnListener);
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                selectedYear = year;
+                selectedMonth = month + 1;
+                selectedDay = dayOfMonth;
+            }
+        });
     }
     View.OnClickListener rbListener = new View.OnClickListener() {
         @Override
@@ -60,6 +77,24 @@ public class MainActivity extends AppCompatActivity {
             } else if(rbEvent == rb_time) {
                 calendar.setVisibility(View.INVISIBLE);
                 time_pick.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
+    View.OnClickListener btnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Button btnEvent = (Button) v;
+            if(btnEvent == btn_start) {
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                chronometer.setTextColor(Color.RED);
+            } else if(btnEvent == btnDone) {
+                chronometer.stop();
+                chronometer.setTextColor(Color.BLUE);
+                selectedHour = time_pick.getHour();
+                selectedMinute = time_pick.getMinute();
+                text_result.setText("예약 완료 : " + selectedYear + "년 " + selectedMonth + "월 " + selectedDay + "일 " + selectedHour + "시 " + selectedMinute + "분");
             }
         }
     };
